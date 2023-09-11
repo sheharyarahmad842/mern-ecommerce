@@ -4,19 +4,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { savePaymentMethod } from "../slices/cartSlice";
 import FormContainer from "../components/FormContainer";
+import CheckoutSteps from "../components/CheckoutSteps";
 
 const PaymentScreen = () => {
   const cart = useSelector((state) => state.cart);
-  const { shippingAddess } = cart;
-  const dispatch = useDispatch();
+  const { shippingAddress } = cart;
   const navigate = useNavigate();
-  const [paymentMethod, setPaymentMethod] = useState("PayPal");
 
   useEffect(() => {
-    if (!shippingAddess.adddress) {
+    if (!shippingAddress.address) {
       navigate("/shipping");
     }
-  }, [navigate, shippingAddess]);
+  }, [navigate, shippingAddress.address]);
+
+  const dispatch = useDispatch();
+  const [paymentMethod, setPaymentMethod] = useState("PayPal");
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -25,6 +27,7 @@ const PaymentScreen = () => {
   };
   return (
     <FormContainer>
+      <CheckoutSteps step1 step2 step3 />
       <h1 className="text-center">Payment Method</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group>
