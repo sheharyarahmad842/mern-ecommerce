@@ -20,12 +20,14 @@ const OrderScreen = () => {
     error,
   } = useGetOrderDetailsQuery(orderId);
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
+  // For Managing PayPal Script
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const {
     data: paypal,
     isLoading: loadingPayPal,
     error: errorPayPal,
   } = useGetPayPalClientIdQuery();
+  // For Loading PayPal Script
   useEffect(() => {
     if (!errorPayPal && !loadingPayPal && paypal.clientId) {
       const loadPayPalScript = async () => {
