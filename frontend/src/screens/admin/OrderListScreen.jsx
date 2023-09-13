@@ -6,7 +6,7 @@ import { useGetOrdersQuery } from "../../slices/ordersApiSlice";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 
-const OrderList = () => {
+const OrderListScreen = () => {
   const { data: orders, isLoading, error } = useGetOrdersQuery();
   return (
     <>
@@ -65,4 +65,4 @@ const OrderList = () => {
   );
 };
 
-export default OrderList;
+export default OrderListScreen;
