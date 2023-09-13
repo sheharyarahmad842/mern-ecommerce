@@ -65,12 +65,12 @@ const ProductListScreen = () => {
                 <td>{product.category}</td>
                 <td>{product.brand}</td>
                 <td>
-                  <LinkContainer to={`/admin/${product._id}/edit`}>
+                  <LinkContainer to={`/admin/product/${product._id}/edit`}>
                     <Button variant="light" className="btn-sm mx-2">
                       <FaEdit />
                     </Button>
                   </LinkContainer>
-                  <LinkContainer to={`/admin/${product._id}/delete`}>
+                  <LinkContainer to={`/admin/product/${product._id}/delete`}>
                     <Button variant="danger" className="btn-sm">
                       <FaTrash style={{ color: "white" }} />
                     </Button>
