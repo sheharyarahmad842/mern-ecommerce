@@ -107,7 +107,7 @@ const ProfileScreen = () => {
               {error?.data?.message || error.error}
             </Message>
           ) : (
-            <Table striped hover className="mt-2">
+            <Table striped hover responsive className="table-sm">
               <thead>
                 <tr>
                   <th>ID</th>
@@ -122,11 +122,11 @@ const ProfileScreen = () => {
                 {orders.map((order) => (
                   <tr key={order._id}>
                     <td>{order._id}</td>
-                    <td>{order.createdAt.substring(0, 100)}</td>
+                    <td>{order.createdAt.substring(0, 10)}</td>
                     <td>${order.totalPrice}</td>
                     <td>
                       {order.isPaid ? (
-                        order.paidAt.substring(0, 100)
+                        order.paidAt.substring(0, 10)
                       ) : (
                         <FaTimes style={{ color: "red" }} />
                       )}
