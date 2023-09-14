@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import {
   useGetProductDetailsQuery,
   useUpdateProductMutation,
+  useUploadProductImageMutation,
 } from "../../slices/productsApiSlice";
 import FormContainer from "../../components/FormContainer";
 import Loader from "../../components/Loader";
@@ -15,6 +16,8 @@ const ProductEditScreen = () => {
 
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation();
+  const [uploadProductImage, { isLoading: loadingUpload }] =
+    useUploadProductImageMutation();
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [image, setImage] = useState("");
@@ -63,6 +66,19 @@ const ProductEditScreen = () => {
       toast.error(err?.data?.message || err.error);
     }
   };
+
+  const uploadFileHandler = async (e) => {
+    const formData = new FormData();
+    formData.append("image", e.target.files[0]);
+    try {
+      const res = await uploadProductImage(formData).unwrap();
+      console.log(res);
+      toast.success(res.message);
+      setImage(res.image);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
   return (
     <>
       <Link to="/admin/productlist">
@@ -88,7 +104,7 @@ const ProductEditScreen = () => {
                 placeholder="Enter name..."
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-              />
+              ></Form.Control>
             </Form.Group>
             <Form.Group className="my-2">
               <Form.Label>Price</Form.Label>
@@ -97,7 +113,22 @@ const ProductEditScreen = () => {
                 placeholder="Enter price..."
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
-              />
+              ></Form.Control>
+            </Form.Group>
+            <Form.Group className="my-2">
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter image url..."
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+              ></Form.Control>
+              <Form.Control
+                type="file"
+                label="Choose file"
+                onChange={uploadFileHandler}
+              ></Form.Control>
+              {loadingUpload && <Loader />}
             </Form.Group>
             <Form.Group className="my-2">
               <Form.Label>Brand</Form.Label>
@@ -106,7 +137,7 @@ const ProductEditScreen = () => {
                 placeholder="Enter brand..."
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
-              />
+              ></Form.Control>
             </Form.Group>
             <Form.Group className="my-2">
               <Form.Label>Category</Form.Label>
@@ -115,7 +146,7 @@ const ProductEditScreen = () => {
                 placeholder="Enter category..."
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-              />
+              ></Form.Control>
             </Form.Group>
             <Form.Group className="my-2">
               <Form.Label>Count In Stock</Form.Label>
@@ -124,7 +155,7 @@ const ProductEditScreen = () => {
                 placeholder="Enter count in stock..."
                 value={countInStock}
                 onChange={(e) => setCountInStock(e.target.value)}
-              />
+              ></Form.Control>
             </Form.Group>
             <Form.Group className="my-2">
               <Form.Label>Description</Form.Label>
@@ -133,7 +164,7 @@ const ProductEditScreen = () => {
                 placeholder="Enter description..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-              />
+              ></Form.Control>
             </Form.Group>
             <Button
               type="submit"

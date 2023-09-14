@@ -58,7 +58,7 @@ const ProductListScreen = () => {
           </thead>
           <tbody>
             {products.map((product) => (
-              <tr>
+              <tr key={product._id}>
                 <td>{product._id}</td>
                 <td>{product.name}</td>
                 <td>${product.price}</td>
@@ -66,7 +66,7 @@ const ProductListScreen = () => {
                 <td>{product.brand}</td>
                 <td>
                   <LinkContainer to={`/admin/product/${product._id}/edit`}>
-                    <Button variant="light" className="btn-sm mx-2">
+                    <Button variant="light" className="btn-sm mx-2 mb-1">
                       <FaEdit />
                     </Button>
                   </LinkContainer>
