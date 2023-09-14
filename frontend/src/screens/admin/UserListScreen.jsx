@@ -1,0 +1,91 @@
+import React from "react";
+import { Table, Row, Col, Button } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import {
+  useGetUsersQuery,
+  useDeleteUserMutation,
+} from "../../slices/usersApiSlice";
+import { toast } from "react-toastify";
+import Loader from "../../components/Loader";
+import Message from "../../components/Message";
+
+const UserListScreen = () => {
+  const { data: users, isLoading, refetch, error } = useGetUsersQuery();
+  const [deleteUser, { isLoading: loadingDelete }] = useDeleteUserMutation();
+
+  const deleteHandler = async (userId) => {
+    if (window.confirm("Are you sure? ")) {
+      try {
+        await deleteUser(userId);
+        refetch();
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
+      }
+    }
+  };
+  return (
+    <>
+      <Row>
+        <Col>
+          <h1>Users</h1>
+        </Col>
+      </Row>
+      {loadingDelete && <Loader />}
+      <Row>
+        <Col>
+          {isLoading ? (
+            <Loader />
+          ) : error ? (
+            <Message variant="danger">
+              {error?.data?.message || error.error}
+            </Message>
+          ) : (
+            <Table striped bordered hover responsive className="table-sm">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Is Admin</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr key={user._id}>
+                    <td>{user._id}</td>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.isAdmin}</td>
+                    <td>
+                      <LinkContainer to="">
+                        <Button
+                          type="button"
+                          variant="light"
+                          className="btn-sm mx-2 mb-1"
+                        >
+                          <FaEdit />
+                        </Button>
+                      </LinkContainer>
+                      <Button
+                        type="button"
+                        variant="danger"
+                        className="btn-sm"
+                        onClick={() => deleteHandler(user._id)}
+                      >
+                        <FaTrash style={{ color: "white" }} />
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
+        </Col>
+      </Row>
+    </>
+  );
+};
+
+export default UserListScreen;
