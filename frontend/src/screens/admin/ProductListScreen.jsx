@@ -6,19 +6,33 @@ import { toast } from "react-toastify";
 import {
   useGetProductsQuery,
   useCreateProductMutation,
+  useDeleteProductMutation,
 } from "../../slices/productsApiSlice";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 
 const ProductListScreen = () => {
-  const { data: products, isLoading, error } = useGetProductsQuery();
-  const [createProduct, { isLoading: loadingCreate, refetch }] =
+  const { data: products, isLoading, refetch, error } = useGetProductsQuery();
+  const [createProduct, { isLoading: loadingCreate }] =
     useCreateProductMutation();
+  const [deleteProduct, { isLoading: loadingDelete }] =
+    useDeleteProductMutation();
 
   const createProductHandler = async () => {
     if (window.confirm("Are you sure you want to create a new product?")) {
       try {
         await createProduct();
+        refetch();
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
+      }
+    }
+  };
+
+  const deleteHandler = async (productId) => {
+    if (window.confirm("Are you sure?")) {
+      try {
+        await deleteProduct(productId);
         refetch();
       } catch (err) {
         toast.error(err?.data?.message || err.error);
@@ -38,6 +52,7 @@ const ProductListScreen = () => {
         </Col>
       </Row>
       {loadingCreate && <Loader />}
+      {loadingDelete && <Loader />}
       {isLoading ? (
         <Loader />
       ) : error ? (
@@ -70,11 +85,14 @@ const ProductListScreen = () => {
                       <FaEdit />
                     </Button>
                   </LinkContainer>
-                  <LinkContainer to={`/admin/product/${product._id}/delete`}>
-                    <Button variant="danger" className="btn-sm">
-                      <FaTrash style={{ color: "white" }} />
-                    </Button>
-                  </LinkContainer>
+
+                  <Button
+                    variant="danger"
+                    className="btn-sm"
+                    onClick={() => deleteHandler(product._id)}
+                  >
+                    <FaTrash style={{ color: "white" }} />
+                  </Button>
                 </td>
               </tr>
             ))}
