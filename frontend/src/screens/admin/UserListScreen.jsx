@@ -1,7 +1,7 @@
 import React from "react";
 import { Table, Row, Col, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash, FaCheck, FaTimes } from "react-icons/fa";
 import {
   useGetUsersQuery,
   useDeleteUserMutation,
@@ -56,10 +56,18 @@ const UserListScreen = () => {
                   <tr key={user._id}>
                     <td>{user._id}</td>
                     <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>{user.isAdmin}</td>
                     <td>
-                      <LinkContainer to="">
+                      <a href={`mailto:${user.email}`}>{user.email}</a>
+                    </td>
+                    <td>
+                      {user.isAdmin ? (
+                        <FaCheck style={{ color: "green" }} />
+                      ) : (
+                        <FaTimes style={{ color: "red" }} />
+                      )}
+                    </td>
+                    <td>
+                      <LinkContainer to={`/admin/user/${user._id}/edit`}>
                         <Button
                           type="button"
                           variant="light"
