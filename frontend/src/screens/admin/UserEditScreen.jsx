@@ -32,7 +32,7 @@ const UserEditScreen = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const res = await updateUser({ _id: user._id, name, email, isAdmin });
+      await updateUser({ _id: user._id, name, email, isAdmin });
       toast.success("User updated successfully");
       refetch();
       navigate("/admin/userlist");
