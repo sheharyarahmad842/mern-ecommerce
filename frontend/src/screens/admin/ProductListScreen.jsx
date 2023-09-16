@@ -14,9 +14,10 @@ import Message from "../../components/Message";
 import Paginate from "../../components/Paginate";
 
 const ProductListScreen = () => {
-  const { pageNumber } = useParams();
+  const { pageNumber, keyword } = useParams();
   const { data, isLoading, refetch, error } = useGetProductsQuery({
     pageNumber,
+    keyword,
   });
   const [createProduct, { isLoading: loadingCreate }] =
     useCreateProductMutation();
@@ -104,7 +105,7 @@ const ProductListScreen = () => {
           </tbody>
         </Table>
       )}
-      <Paginate pages={data.pages} page={data.page} isAdmin={true}></Paginate>
+      <Paginate pages={data?.pages} page={data?.page} isAdmin={true}></Paginate>
     </>
   );
 };
